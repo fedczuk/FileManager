@@ -1,0 +1,128 @@
+﻿<Window x:Class="FileManager.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:custom="clr-namespace:FileManager"
+    Title="FileManager v1.0" Height="300" Width="512" WindowStartupLocation="CenterScreen" Closing="MainWindowClosingEvent" Icon="folder-development.ico">
+    <Window.InputBindings>
+        <KeyBinding Key="Tab" Modifiers="Control" Command="{x:Static custom:MainWindow.ChangeFileList}" />
+    </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static custom:MainWindow.ChangeFileList}" Executed="ChangeFileListCmdExecuted" />
+        <CommandBinding Command="Help" Executed="HelpCmdExecuted"/>
+        <CommandBinding Command="{x:Static custom:Commands.NewDir}" Executed="NewDirCmdExecuted"/>
+        <CommandBinding Command="{x:Static custom:Commands.NewFile}" Executed="NewFileCmdExecuted"/>
+        <CommandBinding Command="{x:Static custom:Commands.ChangeName}" Executed="ChangeNameCmdExecuted" CanExecute="ListViewCmdCanExecute"/>
+        <CommandBinding Command="{x:Static custom:Commands.Copy}" Executed="CopyCmdExecuted" CanExecute="ListViewCmdCanExecute"/>
+        <CommandBinding Command="{x:Static custom:Commands.Move}" Executed="MoveCmdExecuted" CanExecute="ListViewCmdCanExecute"/>
+        <CommandBinding Command="{x:Static custom:Commands.Delete}" Executed="DeleteCmdExecuted" CanExecute="ListViewCmdCanExecute"/>
+        <CommandBinding Command="{x:Static custom:Commands.Run}" Executed="RunCmdExecuted" CanExecute="ListViewCmdCanExecute"/>
+        <CommandBinding Command="{x:Static custom:Commands.SelectDrive}" Executed="SelectDriveCmdExecuted"/>
+        <CommandBinding Command="{x:Static custom:Commands.GoFsLevelUp}" Executed="GoFsLevelUpCmdExecuted"/>
+        <CommandBinding Command="{x:Static custom:Commands.GoHomeDir}" Executed="HomeDirCmdExecuted"/>
+        <CommandBinding Command="{x:Static custom:Commands.FastSearch}" Executed="FastSearchCmdExecuted"/>
+        <CommandBinding Command="{x:Static custom:Commands.Console}" Executed="ConsoleCmdExecuted"/>
+        <CommandBinding Command="{x:Static custom:Commands.GoTo}" Executed="GoToCmdExecuted"/>
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240*" />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="240*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="22" />
+            <RowDefinition Height="33" />
+            <RowDefinition Height="191*" />
+            <RowDefinition Height="23" />
+        </Grid.RowDefinitions>
+        <Menu Grid.ColumnSpan="3" Name="menu1">
+            <MenuItem Header="Program">
+                <MenuItem Header="Ustawienia" Click="SettingsClickEvent"/>
+                <Separator />
+                <MenuItem Header="Zakończ" Click="ExitClickEvent" InputGestureText="Alt+F4"/>
+            </MenuItem>
+            <MenuItem Header="Akcje">
+                <MenuItem Command="{x:Static custom:Commands.GoFsLevelUp}" />
+                <MenuItem Command="{x:Static custom:Commands.GoTo}" />
+                <Separator />
+                <MenuItem Command="{x:Static custom:Commands.NewDir}" />
+                <MenuItem Command="{x:Static custom:Commands.NewFile}" />
+                <MenuItem Command="{x:Static custom:Commands.ChangeName}" />
+                <MenuItem Command="{x:Static custom:Commands.Copy}" />
+                <MenuItem Command="{x:Static custom:Commands.Move}" />
+                <MenuItem Command="{x:Static custom:Commands.Delete}" />
+                <Separator />
+                <MenuItem Command="{x:Static custom:Commands.Run}" />
+                <MenuItem Command="{x:Static custom:Commands.Console}" />
+                <MenuItem Command="{x:Static custom:Commands.FastSearch}" />
+                <MenuItem Command="{x:Static custom:Commands.SelectDrive}" />
+                <Separator />
+                <MenuItem Command="{x:Static custom:Commands.GoHomeDir}" />
+            </MenuItem>
+            <MenuItem Header="Pomoc">
+                <MenuItem Header="Tematy pomocy" Command="ApplicationCommands.Help" Visibility="Collapsed" />
+                <Separator Visibility="Collapsed" />
+                <MenuItem Header="O programie" Click="AboutClickEvent" />
+            </MenuItem>
+        </Menu>
+        <ToolBarTray Grid.ColumnSpan="3" Grid.Row="1">
+            <ToolBar Name="toolBar1" Height="33">
+                <Button Command="{x:Static custom:Commands.GoFsLevelUp}" ToolTip="W górę">
+                    <Image Source="image/go-up.png" />
+                </Button>
+                <Separator />
+                <Button Command="{x:Static custom:Commands.NewDir}" ToolTip="Nowy folder">
+                    <Image Source="image/folder-new.png" />
+                </Button>
+                <Button Command="{x:Static custom:Commands.Copy}" ToolTip="Kopiuj">
+                    <Image Source="image/folder-copy.png" />
+                </Button>
+                <Button Command="{x:Static custom:Commands.Move}" ToolTip="Przenieś">
+                    <Image Source="image/folder-move.png" />
+                </Button>
+                <Button Command="{x:Static custom:Commands.Delete}" ToolTip="Usuń">
+                    <Image Source="image/folder-delete.png" />
+                </Button>
+                <Separator />
+                <Button Command="{x:Static custom:Commands.Run}" ToolTip="Uruchom">
+                    <Image Source="image/gnome-fs-executable.png" />
+                </Button>
+                <Button Command="{x:Static custom:Commands.Console}" ToolTip="Konsola">
+                    <Image Source="image/utilities-terminal.png" />
+                </Button>
+                <Button Command="{x:Static custom:Commands.FastSearch}" ToolTip="Szybkie wyszukiwanie">
+                    <Image Source="image/folder-saved-search.png" />
+                </Button>
+                <Button Command="{x:Static custom:Commands.SelectDrive}" ToolTip="Wybierz dysk">
+                    <Image Source="image/disk-manager.png" />
+                </Button>
+                <Separator />
+                <Button Command="{x:Static custom:Commands.GoHomeDir}" ToolTip="Folder domowy">
+                    <Image Source="image/gnome-home.png" />
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+        <ListView Grid.Row="2" Name="lvFile1" MouseDoubleClick="lvFileMouseDoubleClick" GotFocus="lvFileGotFocus">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Nazwa" Width="Auto" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Typ" Width="Auto" DisplayMemberBinding="{Binding Extension}" />
+                    <GridViewColumn Header="Rozmiar" Width="Auto" DisplayMemberBinding="{Binding Size}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView Grid.Row="2" Name="lvFile2" Grid.Column="2" MouseDoubleClick="lvFileMouseDoubleClick" GotFocus="lvFileGotFocus">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Nazwa" Width="Auto" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Typ" Width="Auto" DisplayMemberBinding="{Binding Extension}" />
+                    <GridViewColumn Header="Rozmiar" Width="Auto" DisplayMemberBinding="{Binding Size}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <StatusBar Grid.Row="3" Name="statusBar1" Grid.ColumnSpan="3">
+            <Label Padding="0" Name="lPath" />
+            <Label Padding="0" Name="lCount" />
+        </StatusBar>
+    </Grid>
+</Window>

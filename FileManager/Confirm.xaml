@@ -1,0 +1,21 @@
+﻿<Window x:Class="FileManager.Confirm"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Nowy" Height="132" Width="300" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" ShowInTaskbar="False">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="32" />
+            <RowDefinition Height="49*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="18" />
+            <ColumnDefinition Width="242" />
+            <ColumnDefinition Width="18" />
+        </Grid.ColumnDefinitions>
+        <TextBox Name="tbInputText" Grid.Column="1" KeyDown="tbInputTextKeyDown" Grid.Row="1" Margin="0,0,0,9" TabIndex="0" />
+        <Button Margin="87,0,81,0" Name="bOK" Grid.Column="1" IsDefault="True" Click="bOKClickEvent" Grid.Row="2" Height="23" VerticalAlignment="Top" TabIndex="1">OK</Button>
+        <Button HorizontalAlignment="Right" Name="bCancel" Width="75" Grid.Column="1" IsCancel="True" Grid.Row="2" Height="23" VerticalAlignment="Top" TabIndex="2">Anuluj</Button>
+        <Label Visibility="Hidden" Grid.Column="1" Name="lMessage" Margin="0,2,0,0">Nie określono nazwy.</Label>
+    </Grid>
+</Window>
